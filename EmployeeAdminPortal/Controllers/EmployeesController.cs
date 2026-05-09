@@ -64,4 +64,19 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
     context.SaveChanges();
     return Ok(employee);
   }
+
+  [HttpDelete("{id}")]
+  public IActionResult DeleteEmployee(Guid id)
+  {
+    var employee = context.Employees.Find(id);
+
+    if (employee == null)
+    {
+      return NotFound();
+    }
+
+    context.Employees.Remove(employee);
+    context.SaveChanges();
+    return Ok();
+  }
 }
