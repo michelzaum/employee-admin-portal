@@ -46,7 +46,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
     return Ok(employee);
   }
 
-  [HttpPut]
+  [HttpPut("{id}")]
   public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
   {
     var employee = context.Employees.Find(id);
