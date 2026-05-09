@@ -2,6 +2,7 @@ using EmployeeAdminPortal.Data;
 using EmployeeAdminPortal.Models;
 using EmployeeAdminPortal.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeAdminPortal.Controllers;
 
@@ -10,11 +11,11 @@ namespace EmployeeAdminPortal.Controllers;
 public class EmployeesController(ApplicationDbContext context) : ControllerBase
 {
   [HttpGet]
-  public IActionResult GetAllEmployees()
+  public async Task<IActionResult> GetAllEmployees()
   {
     try
     {
-      var employees = context.Employees.ToList();
+      var employees = await context.Employees.ToListAsync();
       return Ok(employees);
     }
     catch (Exception ex)
@@ -24,11 +25,11 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   }
 
   [HttpGet("{id}")]
-  public IActionResult GetEmployeeById(Guid id)
+  public async Task<IActionResult> GetEmployeeById(Guid id)
   {
     try
     {
-      var employee = context.Employees.Find(id);
+      var employee = await context.Employees.FindAsync(id);
 
       if (employee == null)
       {
@@ -44,7 +45,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   }
 
   [HttpPost]
-  public IActionResult AddEmployee(AddEmployeeDto addEmployeeDto)
+  public async Task<IActionResult> AddEmployee(AddEmployeeDto addEmployeeDto)
   {
     try
     {
@@ -57,7 +58,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
       };
 
       context.Employees.Add(employee);
-      context.SaveChanges();
+      await context.SaveChangesAsync();
 
       return Ok(employee);
     }
@@ -68,11 +69,11 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   }
 
   [HttpPut("{id}")]
-  public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
+  public async Task<IActionResult> UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
   {
     try
     {
-      var employee = context.Employees.Find(id);
+      var employee = await context.Employees.FindAsync(id);
 
       if (employee == null)
       {
@@ -84,7 +85,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
       employee.Phone = updateEmployeeDto.Phone;
       employee.Salary = updateEmployeeDto.Salary;
 
-      context.SaveChanges();
+      await context.SaveChangesAsync();
       return Ok(employee);
     }
     catch (Exception ex)
@@ -94,11 +95,11 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   }
 
   [HttpDelete("{id}")]
-  public IActionResult DeleteEmployee(Guid id)
+  public async Task<IActionResult> DeleteEmployee(Guid id)
   {
     try
     {
-      var employee = context.Employees.Find(id);
+      var employee = await context.Employees.FindAsync(id);
 
       if (employee == null)
       {
@@ -106,7 +107,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
       }
 
       context.Employees.Remove(employee);
-      context.SaveChanges();
+      await context.SaveChangesAsync();
       return Ok();
     }
     catch (Exception ex)
