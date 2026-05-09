@@ -45,4 +45,23 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
 
     return Ok(employee);
   }
+
+  [HttpPut]
+  public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
+  {
+    var employee = context.Employees.Find(id);
+
+    if (employee == null)
+    {
+      return NotFound();
+    }
+
+    employee.Name = updateEmployeeDto.Name;
+    employee.Email = updateEmployeeDto.Email;
+    employee.Phone = updateEmployeeDto.Phone;
+    employee.Salary = updateEmployeeDto.Salary;
+
+    context.SaveChanges();
+    return Ok(employee);
+  }
 }
