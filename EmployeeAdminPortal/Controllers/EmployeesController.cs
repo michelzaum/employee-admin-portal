@@ -12,71 +12,106 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   [HttpGet]
   public IActionResult GetAllEmployees()
   {
-    var employees = context.Employees.ToList();
-    return Ok(employees);
+    try
+    {
+      var employees = context.Employees.ToList();
+      return Ok(employees);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(500, $"Internal Server Error: {ex.Message}");
+    }
   }
 
   [HttpGet("{id}")]
   public IActionResult GetEmployeeById(Guid id)
   {
-    var empployee = context.Employees.Find(id);
-
-    if (empployee == null)
+    try
     {
-      return NotFound();
-    }
+      var employee = context.Employees.Find(id);
 
-    return Ok(empployee);
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      return Ok(employee);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(500, $"Internal Server Error: {ex.Message}");
+    }
   }
 
   [HttpPost]
   public IActionResult AddEmployee(AddEmployeeDto addEmployeeDto)
   {
-    var employee = new Employee
+    try
     {
-      Name = addEmployeeDto.Name,
-      Email = addEmployeeDto.Email,
-      Phone = addEmployeeDto.Phone,
-      Salary = addEmployeeDto.Salary
-    };
+      var employee = new Employee
+      {
+        Name = addEmployeeDto.Name,
+        Email = addEmployeeDto.Email,
+        Phone = addEmployeeDto.Phone,
+        Salary = addEmployeeDto.Salary
+      };
 
-    context.Employees.Add(employee);
-    context.SaveChanges();
+      context.Employees.Add(employee);
+      context.SaveChanges();
 
-    return Ok(employee);
+      return Ok(employee);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(500, $"Internal Server Error: {ex.Message}");
+    }
   }
 
   [HttpPut("{id}")]
   public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
   {
-    var employee = context.Employees.Find(id);
-
-    if (employee == null)
+    try
     {
-      return NotFound();
+      var employee = context.Employees.Find(id);
+
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      employee.Name = updateEmployeeDto.Name;
+      employee.Email = updateEmployeeDto.Email;
+      employee.Phone = updateEmployeeDto.Phone;
+      employee.Salary = updateEmployeeDto.Salary;
+
+      context.SaveChanges();
+      return Ok(employee);
     }
-
-    employee.Name = updateEmployeeDto.Name;
-    employee.Email = updateEmployeeDto.Email;
-    employee.Phone = updateEmployeeDto.Phone;
-    employee.Salary = updateEmployeeDto.Salary;
-
-    context.SaveChanges();
-    return Ok(employee);
+    catch (Exception ex)
+    {
+      return StatusCode(500, $"Internal Server Error: {ex.Message}");
+    }
   }
 
   [HttpDelete("{id}")]
   public IActionResult DeleteEmployee(Guid id)
   {
-    var employee = context.Employees.Find(id);
-
-    if (employee == null)
+    try
     {
-      return NotFound();
-    }
+      var employee = context.Employees.Find(id);
 
-    context.Employees.Remove(employee);
-    context.SaveChanges();
-    return Ok();
+      if (employee == null)
+      {
+        return NotFound();
+      }
+
+      context.Employees.Remove(employee);
+      context.SaveChanges();
+      return Ok();
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(500, $"Internal Server Error: {ex.Message}");
+    }
   }
 }
