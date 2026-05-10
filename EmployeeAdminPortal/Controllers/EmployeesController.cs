@@ -1,4 +1,4 @@
-using EmployeeAdminPortal.Data;
+using EmployeeAdminPortal.Infra.Data;
 using EmployeeAdminPortal.Domain.Entities;
 using EmployeeAdminPortal.Models;
 using Microsoft.AspNetCore.Mvc;

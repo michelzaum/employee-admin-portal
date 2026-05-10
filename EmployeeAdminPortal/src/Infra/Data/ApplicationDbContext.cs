@@ -1,7 +1,7 @@
 using EmployeeAdminPortal.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace EmployeeAdminPortal.Data
+namespace EmployeeAdminPortal.Infra.Data
 {
   public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
   {
