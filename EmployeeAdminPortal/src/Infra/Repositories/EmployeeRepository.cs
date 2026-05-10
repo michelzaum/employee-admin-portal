@@ -2,14 +2,15 @@ using EmployeeAdminPortal.Domain.Entities;
 using EmployeeAdminPortal.Domain.Interfaces;
 using EmployeeAdminPortal.Models;
 using EmployeeAdminPortal.Infra.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeAdminPortal.Infra.Repositories;
 
 public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepository
 {
-  public Task<List<Employee>> GetAllAsync()
+  public async Task<List<Employee>> GetAllAsync()
   {
-    throw new NotImplementedException();
+    return await dbContext.Employees.ToListAsync();
   }
 
   public Task<Employee> GetByIdAsync(Guid id)
