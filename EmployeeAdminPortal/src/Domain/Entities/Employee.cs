@@ -1,4 +1,4 @@
-namespace EmployeeAdminPortal.Models.Entities 
+namespace EmployeeAdminPortal.Domain.Entities 
 {
   public class Employee
   {
