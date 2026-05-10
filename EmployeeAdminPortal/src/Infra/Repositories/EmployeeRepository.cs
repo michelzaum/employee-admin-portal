@@ -3,6 +3,7 @@ using EmployeeAdminPortal.Domain.Interfaces;
 using EmployeeAdminPortal.Models;
 using EmployeeAdminPortal.Infra.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EmployeeAdminPortal.Infra.Repositories;
 
@@ -18,9 +19,12 @@ public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepos
     return await dbContext.Employees.FindAsync(id);
   }
 
-  public Task<Employee> CreateAsync(AddEmployeeDto addEmployeeDto)
+  public async Task<EntityEntry<Employee>> CreateAsync(Employee employee)
   {
-    throw new NotImplementedException();
+    var newEmployee = await dbContext.Employees.AddAsync(employee);
+    await dbContext.SaveChangesAsync();
+
+    return newEmployee;
   }
 
   public Task<Employee> UpdateAsync(Guid id, UpdateEmployeeDto updateEmployeeDto)
