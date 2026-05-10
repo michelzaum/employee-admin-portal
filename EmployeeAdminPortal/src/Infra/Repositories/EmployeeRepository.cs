@@ -13,9 +13,9 @@ public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepos
     return await dbContext.Employees.ToListAsync();
   }
 
-  public Task<Employee> GetByIdAsync(Guid id)
+  public async Task<Employee?> GetByIdAsync(Guid id)
   {
-    throw new NotImplementedException();
+    return await dbContext.Employees.FindAsync(id);
   }
 
   public Task<Employee> CreateAsync(AddEmployeeDto addEmployeeDto)
