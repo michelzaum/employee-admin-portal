@@ -1,6 +1,5 @@
 using EmployeeAdminPortal.Domain.Entities;
 using EmployeeAdminPortal.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EmployeeAdminPortal.Domain.Interfaces;
