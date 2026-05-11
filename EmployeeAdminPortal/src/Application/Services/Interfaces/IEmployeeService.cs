@@ -2,7 +2,7 @@ using EmployeeAdminPortal.Domain.Entities;
 using EmployeeAdminPortal.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace EmployeeAdminPortal.Application.Services;
+namespace EmployeeAdminPortal.Application.Services.Interfaces;
 
 public interface IEmployeeService
 {
