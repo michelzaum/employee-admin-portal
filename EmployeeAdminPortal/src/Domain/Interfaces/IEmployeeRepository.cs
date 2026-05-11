@@ -10,6 +10,6 @@ public interface IEmployeeRepository
   Task<List<Employee>> GetAllAsync();
   Task<Employee?> GetByIdAsync(Guid id);
   Task<EntityEntry<Employee>> CreateAsync(Employee employee);
-  Task<Employee> UpdateAsync(Guid id, UpdateEmployeeDto updateEmployeeDto);
-  Task DeleteAsync(int id);
+  Task<int> UpdateAsync(Guid id, UpdateEmployeeDto updateEmployeeDto);
+  Task DeleteAsync(Guid id);
 }

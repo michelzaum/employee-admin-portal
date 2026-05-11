@@ -27,13 +27,27 @@ public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepos
     return newEmployee;
   }
 
-  public Task<Employee> UpdateAsync(Guid id, UpdateEmployeeDto updateEmployeeDto)
+  public async Task<int> UpdateAsync(Guid id, UpdateEmployeeDto updateEmployeeDto)
   {
-    throw new NotImplementedException();
+    return await dbContext.Employees
+      .Where(e => e.Id == id)
+      .ExecuteUpdateAsync(setters => setters
+        .SetProperty(p => p.Email, updateEmployeeDto.Email)
+        .SetProperty(p => p.Name, updateEmployeeDto.Name)
+        .SetProperty(p => p.Phone, updateEmployeeDto.Phone)
+        .SetProperty(p => p.Salary, updateEmployeeDto.Salary)
+      );
   }
 
-  public Task DeleteAsync(int id)
+  public async Task DeleteAsync(Guid id)
   {
-    throw new NotImplementedException();
+    // This should be improved
+    var employee = await this.GetByIdAsync(id);
+
+    if (employee != null)
+    {
+      dbContext.Employees.Remove(employee);
+      await dbContext.SaveChangesAsync();
+    }
   }
 }
