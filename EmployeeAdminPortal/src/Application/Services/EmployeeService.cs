@@ -1,12 +1,12 @@
 using EmployeeAdminPortal.Application.Services.Interfaces;
 using EmployeeAdminPortal.Domain.Entities;
+using EmployeeAdminPortal.Domain.Interfaces;
 using EmployeeAdminPortal.Models;
-using EmployeeAdminPortal.Infra.Repositories;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EmployeeAdminPortal.Application.Services;
 
-public class EmployeeService(EmployeeRepository employeeRepository) : IEmployeeService
+public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
 {
   public async Task<List<Employee>> GetAllAsync()
   {

@@ -1,21 +1,20 @@
-using EmployeeAdminPortal.Infra.Data;
+using EmployeeAdminPortal.Application.Services.Interfaces;
 using EmployeeAdminPortal.Domain.Entities;
 using EmployeeAdminPortal.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace EmployeeAdminPortal.Controllers;
+namespace EmployeeAdminPortal.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeesController(ApplicationDbContext context) : ControllerBase
+public class EmployeesController(IEmployeeService employeeService) : ControllerBase
 {
   [HttpGet]
   public async Task<IActionResult> GetAllEmployees()
   {
     try
     {
-      var employees = await context.Employees.ToListAsync();
+      var employees = await employeeService.GetAllAsync();
       return Ok(employees);
     }
     catch (Exception ex)
@@ -29,7 +28,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   {
     try
     {
-      var employee = await context.Employees.FindAsync(id);
+      var employee = await employeeService.GetByIdAsync(id);
 
       if (employee == null)
       {
@@ -57,8 +56,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
         Salary = addEmployeeDto.Salary
       };
 
-      context.Employees.Add(employee);
-      await context.SaveChangesAsync();
+      await employeeService.CreateAsync(employee);
 
       return Ok(employee);
     }
@@ -73,19 +71,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   {
     try
     {
-      var employee = await context.Employees.FindAsync(id);
-
-      if (employee == null)
-      {
-        return NotFound();
-      }
-
-      employee.Name = updateEmployeeDto.Name;
-      employee.Email = updateEmployeeDto.Email;
-      employee.Phone = updateEmployeeDto.Phone;
-      employee.Salary = updateEmployeeDto.Salary;
-
-      await context.SaveChangesAsync();
+      var employee = await employeeService.UpdateAsync(id, updateEmployeeDto);
       return Ok(employee);
     }
     catch (Exception ex)
@@ -99,15 +85,7 @@ public class EmployeesController(ApplicationDbContext context) : ControllerBase
   {
     try
     {
-      var employee = await context.Employees.FindAsync(id);
-
-      if (employee == null)
-      {
-        return NotFound();
-      }
-
-      context.Employees.Remove(employee);
-      await context.SaveChangesAsync();
+      await employeeService.DeleteAsync(id);
       return Ok();
     }
     catch (Exception ex)

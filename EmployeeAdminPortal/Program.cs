@@ -1,4 +1,8 @@
+using EmployeeAdminPortal.Application.Services;
+using EmployeeAdminPortal.Application.Services.Interfaces;
+using EmployeeAdminPortal.Domain.Interfaces;
 using EmployeeAdminPortal.Infra.Data;
+using EmployeeAdminPortal.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
       builder.Configuration.GetConnectionString("DefaultConnection")
       )
     );
+
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
 var app = builder.Build();
 
