@@ -7,18 +7,20 @@ namespace EmployeeAdminPortal.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeesController(IEmployeeService employeeService) : ControllerBase
+public class EmployeesController(IEmployeeService employeeService, ILogger<EmployeesController> logger) : ControllerBase
 {
   [HttpGet]
   public async Task<IActionResult> GetAllEmployees()
   {
     try
     {
+      logger.LogInformation("Fetching all employees");
       var employees = await employeeService.GetAllAsync();
       return Ok(employees);
     }
     catch (Exception ex)
     {
+      logger.LogError($"Error fetching all employees: {ex.Message}");
       return StatusCode(500, $"Internal Server Error: {ex.Message}");
     }
   }
@@ -28,6 +30,7 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
   {
     try
     {
+      logger.LogInformation("Fetching employee by id");
       var employee = await employeeService.GetByIdAsync(id);
 
       if (employee == null)
@@ -39,6 +42,7 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
     }
     catch (Exception ex)
     {
+      logger.LogError($"Error fetching employee with id {id}: {ex.Message}");
       return StatusCode(500, $"Internal Server Error: {ex.Message}");
     }
   }
@@ -48,6 +52,7 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
   {
     try
     {
+      logger.LogInformation("Creating new employee");
       var employee = new Employee
       {
         Name = addEmployeeDto.Name,
@@ -62,6 +67,7 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
     }
     catch (Exception ex)
     {
+      logger.LogError($"Error creating new employee {ex.Message}");
       return StatusCode(500, $"Internal Server Error: {ex.Message}");
     }
   }
@@ -71,11 +77,13 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
   {
     try
     {
+      logger.LogInformation("Updating employee");
       var employee = await employeeService.UpdateAsync(id, updateEmployeeDto);
       return Ok(employee);
     }
     catch (Exception ex)
     {
+      logger.LogError($"Error updating employee with id {id}: {ex.Message}");
       return StatusCode(500, $"Internal Server Error: {ex.Message}");
     }
   }
@@ -85,11 +93,13 @@ public class EmployeesController(IEmployeeService employeeService) : ControllerB
   {
     try
     {
+      logger.LogInformation($"Deleting employee with id {id}");
       await employeeService.DeleteAsync(id);
       return Ok();
     }
     catch (Exception ex)
     {
+      logger.LogError($"Error deleting employee with id {id}: {ex.Message}");
       return StatusCode(500, $"Internal Server Error: {ex.Message}");
     }
   }
